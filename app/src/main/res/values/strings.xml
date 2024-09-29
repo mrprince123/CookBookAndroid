@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">CookBook</string>
+    <string name="title_home">Home</string>
+    <string name="title_recipe">Recipe</string>
+    <string name="title_wishlist">Blogs</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

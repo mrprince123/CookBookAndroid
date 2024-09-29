@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/popular_recipe_image"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/gulab_jamun"
+            app:strokeColor="@android:color/holo_purple"
+            app:strokeWidth="2dp" />
+
+        <TextView
+            android:id="@+id/popular_recipe_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:padding="5dp"
+            android:text="Aloo Paratha"
+            android:textAlignment="textStart"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/popular_recipe_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="This is the Best Gular Jamun Recipe"
+            android:textAlignment="textStart"
+            android:textColor="@color/grayText"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

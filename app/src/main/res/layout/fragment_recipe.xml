@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragment.RecipeFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/search_recipe_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search for a recipe..."
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/gray"
+            android:background="@drawable/rounded_edittext"
+            android:inputType="text"
+            android:drawableStart="@drawable/search_24"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:drawablePadding="8dp"/>
+
+        <TextView
+            android:id="@+id/categoryName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Indian"
+            android:textStyle="bold"
+            android:layout_marginBottom="5dp"
+            android:textSize="20sp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recipe_recycle_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+</ScrollView>
