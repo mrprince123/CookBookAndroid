@@ -14,8 +14,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
-import com.cook.cookbook.Models.Ingredient;
-import com.cook.cookbook.Models.Recipe;
 import com.cook.cookbook.R;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
@@ -84,7 +82,6 @@ public class FullRecipeActivity extends AppCompatActivity {
                 youTubePlayer.loadVideo(videoId, 0);
             }
         });
-
     }
 
     // Extract the video ID from a YouTube URL

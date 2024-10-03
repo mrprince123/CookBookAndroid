@@ -1,15 +1,20 @@
 package com.cook.cookbook.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.viewmodel.CreationExtras;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +28,7 @@ import com.android.volley.toolbox.Volley;
 import com.cook.cookbook.Adapter.CategoryAdapter;
 import com.cook.cookbook.Adapter.PopularRecipeAdapter;
 import com.cook.cookbook.Adapter.RecipeAdapter;
+import com.cook.cookbook.Adapter.RecipeAdapterHome;
 import com.cook.cookbook.Models.Category;
 import com.cook.cookbook.Models.Ingredient;
 import com.cook.cookbook.Models.Recipe;
@@ -49,8 +55,19 @@ public class HomeFragment extends Fragment {
     ImageCarousel imageCarousel;
 
     RecyclerView popularRecipeRecyle;
-    ArrayList<Recipe> recipeList;
+    ArrayList<Recipe> recipePopularList;
     PopularRecipeAdapter popularRecipeAdapter;
+
+    ImageView languageChange;
+
+    RecyclerView homeRecipeRecycle;
+    ArrayList<Recipe> recipeList;
+    RecipeAdapterHome recipeAdapterHome;
+
+    TextView allRecipe;
+
+
+    LinearLayout  loadingCategory, loadingPopularRecipe, loadingAllRecipe;
 
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -59,25 +76,70 @@ public class HomeFragment extends Fragment {
         categoryRecycleView = view.findViewById(R.id.category_recycle_view);
         imageCarousel = view.findViewById(R.id.carousel_image);
         popularRecipeRecyle = view.findViewById(R.id.popular_recipe_recycle_view);
-        initCategory();
-        initRecipe();
+        homeRecipeRecycle = view.findViewById(R.id.all_recipe_recycle_view_home);
+        languageChange = view.findViewById(R.id.language_change_logo);
+        loadingCategory = view.findViewById(R.id.loading_categories);
+        loadingPopularRecipe = view.findViewById(R.id.loading_popular_recipe);
+        loadingAllRecipe = view.findViewById(R.id.loading_all_recipe);
+
+        languageChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Language Change Development is going on", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        allRecipe = view.findViewById(R.id.view_all_recipe);
+
         setCarouselImage();
+        initCategory();
+        initPopularRecipe();
+        initRecipe();
         return view;
     }
 
+    // To set Carousel
     void setCarouselImage(){
 
+        List<CarouselItem> list = new ArrayList<>();
+        // Get data from backend
         imageCarousel.registerLifecycle(getLifecycle());
 
-        List<CarouselItem> list = new ArrayList<>();
-        list.add(new CarouselItem("https://miro.medium.com/v2/resize:fit:1400/1*eWbNRY_UnGFJC5YqcqBSwA.jpeg", "Carousel 1"));
-        list.add(new CarouselItem("https://www.businessofapps.com/wp-content/uploads/2022/01/emizen_tech_food_deliver_img1.png", "Carousel 2"));
-        list.add(new CarouselItem("https://i.pinimg.com/originals/c3/23/d5/c323d5d60144d9bb244221a9550e8b4a.png", "Carousel 3"));
-        list.add(new CarouselItem("https://cdn.dribbble.com/users/8299015/screenshots/16963977/food_app_screen_1.jpg", "Carousel 4"));
+        RequestQueue carouselQueue = Volley.newRequestQueue(getContext());
+        String url = Constants.ALL_CAROUSEL;
 
-        imageCarousel.setData(list);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                    try {
+                        JSONObject mainObj = new JSONObject(response);
+                        Log.e("CAROUSEL", response);
+                        if(mainObj.getString("success").equals("true")){
+                            JSONArray carouselData = mainObj.getJSONArray("data");
+
+                            for(int i = 0; i<carouselData.length(); i++){
+                                JSONObject object = carouselData.getJSONObject(i);
+                                String carouseImageUrl = object.getString("imageUrl");
+                                String carouseCaption = object.getString("caption");
+                                list.add(new CarouselItem(carouseImageUrl, carouseCaption));
+                            }
+                            imageCarousel.setData(list);
+                        }
+                    } catch (JSONException e){
+                            e.printStackTrace();
+                    }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Log or handle the error (e.g., show a Toast or retry mechanism)
+                error.printStackTrace();
+            }
+        });
+        carouselQueue.add(stringRequest);
     }
 
+    // To Set the category Data to the Layout
     void initCategory(){
         categoryList = new ArrayList<>();
         adapter = new CategoryAdapter(getContext(), categoryList);
@@ -89,13 +151,16 @@ public class HomeFragment extends Fragment {
         categoryRecycleView.setAdapter(adapter);
     }
 
+    // To Get all the Category
     void getAllCategory() {
         RequestQueue queue = Volley.newRequestQueue(getContext());
         String url = Constants.ALL_CATEGORY;
+        loadingCategory.setVisibility(View.VISIBLE);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.e("RESPONSE", response);
+                loadingCategory.setVisibility(View.GONE);
                 try {
 
                     JSONObject mainObj = new JSONObject(response);
@@ -121,31 +186,38 @@ public class HomeFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
                 // Do Nothing
                 Log.e("Error", error.toString());
+                loadingCategory.setVisibility(View.GONE);
+
             }
         });
 
         queue.add(stringRequest);
     }
 
-    void initRecipe(){
-        recipeList = new ArrayList<>();
-        popularRecipeAdapter = new PopularRecipeAdapter(getContext(), recipeList);
+    // To set the Recipe to the Popular Recipe
+    void initPopularRecipe(){
+        recipePopularList = new ArrayList<>();
+        popularRecipeAdapter = new PopularRecipeAdapter(getContext(), recipePopularList);
 
-        getRecipe();
+        getPopularRecipe();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
         popularRecipeRecyle.setLayoutManager(layoutManager);
         popularRecipeRecyle.setAdapter(popularRecipeAdapter);
     }
 
-    void getRecipe(){
+    // To get all the Popular
+    void getPopularRecipe(){
 
         RequestQueue queue = Volley.newRequestQueue(getContext());
-        String url = Constants.ALL_RECIPE;
+        String url = Constants.POPULAR_RECIPE;
+        loadingPopularRecipe.setVisibility(View.VISIBLE);
+
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.e("RECIPE HOME", response);
+                loadingPopularRecipe.setVisibility(View.GONE);
                 try {
                     JSONObject mainObj = new JSONObject(response);
                     if(mainObj.getString("success").equals("true")){
@@ -179,7 +251,7 @@ public class HomeFragment extends Fragment {
                                     ingredientList,
                                     categoryName
                             );
-                            recipeList.add(recipe);
+                            recipePopularList.add(recipe);
                         }
                         popularRecipeAdapter.notifyDataSetChanged();
                     }
@@ -191,6 +263,83 @@ public class HomeFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Error", error.toString());
+                loadingPopularRecipe.setVisibility(View.GONE);
+
+            }
+        });
+        queue.add(stringRequest);
+    }
+
+    // To get all the Recipe
+    void initRecipe(){
+        recipeList = new ArrayList<>();
+        recipeAdapterHome = new RecipeAdapterHome(getContext(), recipeList);
+
+        getRecipe();
+
+        LinearLayoutManager layoutManagerrecipe = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        homeRecipeRecycle.setLayoutManager(layoutManagerrecipe);
+        homeRecipeRecycle.setAdapter(recipeAdapterHome);
+    }
+
+    // To get all the Recipe
+    void getRecipe(){
+
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        String url = Constants.ALL_RECIPE;
+        loadingAllRecipe.setVisibility(View.VISIBLE);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.e("RECIPE HOME", response);
+                loadingAllRecipe.setVisibility(View.GONE);
+                try {
+                    JSONObject mainObj = new JSONObject(response);
+                    if(mainObj.getString("success").equals("true")){
+                        JSONArray recipeArray =  mainObj.getJSONArray("data");
+                        for(int i = 0; i<10; i++){
+
+                            JSONObject object = recipeArray.getJSONObject(i);
+                            JSONObject categoryObj = object.getJSONObject("categoryId");
+                            String categoryName = categoryObj.getString("categoryName");
+
+                            // Extracting ingredients array
+                            JSONArray ingredientsArray = object.getJSONArray("ingredients");
+                            List<Ingredient> ingredientList = new ArrayList<>();
+                            for(int j = 0; j < ingredientsArray.length(); j++){
+                                JSONObject ingredientObj = ingredientsArray.getJSONObject(j);
+                                Ingredient ingredient = new Ingredient(
+                                        ingredientObj.getString("name"),
+                                        ingredientObj.getString("quantity")
+                                );
+                                ingredientList.add(ingredient);
+                            }
+
+                            Recipe recipe = new Recipe(
+                                    object.getString("name"),
+                                    object.getString("image"),
+                                    object.getString("videoUrl"),
+                                    object.getString("cooking_time"),
+                                    object.getString("foodType"),
+                                    object.getString("description"),
+                                    object.getString("chef"),
+                                    ingredientList,
+                                    categoryName
+                            );
+                            recipeList.add(recipe);
+                        }
+                        recipeAdapterHome.notifyDataSetChanged();
+                    }
+                } catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error", error.toString());
+                loadingAllRecipe.setVisibility(View.GONE);
+
             }
         });
         queue.add(stringRequest);

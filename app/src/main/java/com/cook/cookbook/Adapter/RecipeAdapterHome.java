@@ -20,29 +20,27 @@ import com.cook.cookbook.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class RecipeSpecificAdapter extends RecyclerView.Adapter<RecipeSpecificAdapter.RecipeViewHolder> {
-
+public class RecipeAdapterHome extends RecyclerView.Adapter<RecipeAdapterHome.RecipeViewHolder> {
     private final Context context;
     private final ArrayList<Recipe> recipes;
 
-    public RecipeSpecificAdapter(Context context, ArrayList<Recipe> recipes) {
+    public RecipeAdapterHome(Context context, ArrayList<Recipe> recipes) {
         this.context = context;
         this.recipes = recipes;
     }
 
     @NonNull
     @Override
-    public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new RecipeViewHolder(LayoutInflater.from(context).inflate(R.layout.recipe_item, parent, false));
+    public RecipeAdapterHome.RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new RecipeAdapterHome.RecipeViewHolder(LayoutInflater.from(context).inflate(R.layout.item_recipe_home, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecipeSpecificAdapter.RecipeViewHolder holder, int position) {
-
+    public void onBindViewHolder(@NonNull RecipeAdapterHome.RecipeViewHolder holder, int position) {
         Recipe recipe = recipes.get(position);
 
         holder.recipeName.setText(recipe.getName());
-        holder.recipeTime.setText(recipe.getDescription().substring(0, 25));
+        holder.recipeTime.setText(recipe.getCooking_time());
         Glide.with(context).load(recipe.getImage()).into(holder.recipeImage);
 
         holder.itemView.setOnClickListener(view -> {
@@ -74,7 +72,6 @@ public class RecipeSpecificAdapter extends RecyclerView.Adapter<RecipeSpecificAd
             // Start the FullRecipeActivity
             context.startActivity(intent);
         });
-
     }
 
     @Override
@@ -89,9 +86,10 @@ public class RecipeSpecificAdapter extends RecyclerView.Adapter<RecipeSpecificAd
 
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
-            recipeName = itemView.findViewById(R.id.recipe_name);
-            recipeImage = itemView.findViewById(R.id.recipe_image);
-            recipeTime = itemView.findViewById(R.id.recipe_description);
+            recipeName = itemView.findViewById(R.id.recipe_home_name);
+            recipeImage = itemView.findViewById(R.id.recipe_home_image);
+            recipeTime = itemView.findViewById(R.id.recipe_home_time);
         }
     }
 }
+

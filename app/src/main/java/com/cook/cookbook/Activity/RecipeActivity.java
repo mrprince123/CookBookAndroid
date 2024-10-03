@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -41,6 +42,8 @@ public class RecipeActivity extends AppCompatActivity {
     RecyclerView recipeSpecificRecycle;
     TextView catNameText, noRecipeText;
 
+    LinearLayout loadingRecipeData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,8 +64,8 @@ public class RecipeActivity extends AppCompatActivity {
         catNameText = findViewById(R.id.cat_name_text);
         catNameText.setText(catName);
         noRecipeText = findViewById(R.id.no_recipe_text);
-        noRecipeText.setVisibility(View.INVISIBLE);
-
+        noRecipeText.setVisibility(View.GONE);
+        loadingRecipeData = findViewById(R.id.loading_recipe_data);
 
         initRecipe();
     }
@@ -81,10 +84,13 @@ public class RecipeActivity extends AppCompatActivity {
     void getRecipe(){
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = Constants.ALL_RECIPE;
+        loadingRecipeData.setVisibility(View.VISIBLE); // Show the Loading Screen
+
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.e("RECIPE HOME", response);
+                loadingRecipeData.setVisibility(View.GONE);
                 try {
                     JSONObject mainObj = new JSONObject(response);
                     if(mainObj.getString("success").equals("true")){
@@ -134,10 +140,10 @@ public class RecipeActivity extends AppCompatActivity {
                         if (recipes.isEmpty()) {
                             // No recipes found for the selected category
                             noRecipeText.setVisibility(View.VISIBLE);
-                            recipeSpecificRecycle.setVisibility(View.INVISIBLE);
+                            recipeSpecificRecycle.setVisibility(View.GONE);
                         } else {
                             // Recipes are found, show the list
-                            noRecipeText.setVisibility(View.INVISIBLE);
+                            noRecipeText.setVisibility(View.GONE);
                             recipeSpecificRecycle.setVisibility(View.VISIBLE);
                         }
                         recipeSpecificAdapter.notifyDataSetChanged();
@@ -150,6 +156,7 @@ public class RecipeActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Error", error.toString());
+                loadingRecipeData.setVisibility(View.VISIBLE); // Show the Loading Screen
             }
         });
         queue.add(stringRequest);

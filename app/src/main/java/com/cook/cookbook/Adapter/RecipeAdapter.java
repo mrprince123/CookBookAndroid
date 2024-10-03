@@ -42,7 +42,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         Recipe recipe = recipes.get(position);
 
         holder.recipeName.setText(recipe.getName());
-        holder.recipeTime.setText(recipe.getCooking_time());
+        holder.recipeTime.setText(recipe.getDescription().substring(0, 25));
         Glide.with(context).load(recipe.getImage()).into(holder.recipeImage);
 
         holder.itemView.setOnClickListener(view -> {
@@ -90,7 +90,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             super(itemView);
             recipeName = itemView.findViewById(R.id.recipe_name);
             recipeImage = itemView.findViewById(R.id.recipe_image);
-            recipeTime = itemView.findViewById(R.id.recipe_time);
+            recipeTime = itemView.findViewById(R.id.recipe_description);
         }
     }
 }

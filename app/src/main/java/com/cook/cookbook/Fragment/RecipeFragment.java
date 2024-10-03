@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,6 +23,7 @@ import com.cook.cookbook.Models.Ingredient;
 import com.cook.cookbook.Models.Recipe;
 import com.cook.cookbook.R;
 import com.cook.cookbook.Utils.Constants;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,12 +38,21 @@ public class RecipeFragment extends Fragment {
     ArrayList<Recipe> recipeList;
     RecipeAdapter adapter;
 
+    LinearLayout breakfast, lunch, dinner, loadingRecipe;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recipe, container, false);
         recipeRecycleView = view.findViewById(R.id.recipe_recycle_view);
+
+        breakfast = view.findViewById(R.id.breakfast);
+        lunch = view.findViewById(R.id.lunch);
+        dinner = view.findViewById(R.id.dinner);
+        loadingRecipe = view.findViewById(R.id.loading_recipe);
+
+
         initRecipe();
         return view;
     }
@@ -49,21 +60,51 @@ public class RecipeFragment extends Fragment {
     void initRecipe(){
         recipeList = new ArrayList<>();
         adapter = new RecipeAdapter(getContext(), recipeList);
-
-        getRecipe();
-
-        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
+        setupCategoryClickListeners();
+        getRecipe(null);  // Load all recipes initially
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         recipeRecycleView.setLayoutManager(layoutManager);
         recipeRecycleView.setAdapter(adapter);
     }
 
-    void getRecipe(){
+
+    // Setting up click listeners for each category
+    void setupCategoryClickListeners() {
+        breakfast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getRecipe("breakfast");
+            }
+        });
+
+        lunch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getRecipe("lunch");
+            }
+        });
+
+        dinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getRecipe("dinner");
+            }
+        });
+    }
+
+    void getRecipe(final String foodType){
+        recipeList.clear(); // Clear the list before adding the new itsms
         RequestQueue queue = Volley.newRequestQueue(getContext());
         String url = Constants.ALL_RECIPE;
+
+        loadingRecipe.setVisibility(View.VISIBLE);
+
+
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.e("RECIPE", response);
+                loadingRecipe.setVisibility(View.GONE);
                 try {
                     JSONObject mainObj = new JSONObject(response);
                     if(mainObj.getString("success").equals("true")){
@@ -86,18 +127,20 @@ public class RecipeFragment extends Fragment {
                                 ingredientList.add(ingredient);
                             }
 
-                            Recipe recipe = new Recipe(
-                                    object.getString("name"),
-                                    object.getString("image"),
-                                    object.getString("videoUrl"),
-                                    object.getString("cooking_time"),
-                                    object.getString("foodType"),
-                                    object.getString("description"),
-                                    object.getString("chef"),
-                                    ingredientList,
-                                    categoryName
-                            );
-                            recipeList.add(recipe);
+                            if(foodType == null || object.getString("foodType").equals(foodType)){
+                                Recipe recipe = new Recipe(
+                                        object.getString("name"),
+                                        object.getString("image"),
+                                        object.getString("videoUrl"),
+                                        object.getString("cooking_time"),
+                                        object.getString("foodType"),
+                                        object.getString("description"),
+                                        object.getString("chef"),
+                                        ingredientList,
+                                        categoryName
+                                );
+                                recipeList.add(recipe);
+                            }
                         }
                         adapter.notifyDataSetChanged();
                     }
@@ -109,6 +152,8 @@ public class RecipeFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Error", error.toString());
+                loadingRecipe.setVisibility(View.GONE);
+
             }
         });
         queue.add(stringRequest);

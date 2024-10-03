@@ -50,8 +50,9 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.youtubePlayer)
     implementation(libs.whynotImage)
+    implementation(libs.shimmer)
 
-    
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
