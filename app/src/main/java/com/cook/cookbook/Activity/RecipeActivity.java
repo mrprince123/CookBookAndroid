@@ -26,6 +26,7 @@ import com.cook.cookbook.Models.Ingredient;
 import com.cook.cookbook.Models.Recipe;
 import com.cook.cookbook.R;
 import com.cook.cookbook.Utils.Constants;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,7 +43,7 @@ public class RecipeActivity extends AppCompatActivity {
     RecyclerView recipeSpecificRecycle;
     TextView catNameText, noRecipeText;
 
-    LinearLayout loadingRecipeData;
+    ShimmerFrameLayout shimmerCategoryRecipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,7 @@ public class RecipeActivity extends AppCompatActivity {
         catNameText.setText(catName);
         noRecipeText = findViewById(R.id.no_recipe_text);
         noRecipeText.setVisibility(View.GONE);
-        loadingRecipeData = findViewById(R.id.loading_recipe_data);
+        shimmerCategoryRecipe = findViewById(R.id.shimmer_category_recipe);
 
         initRecipe();
     }
@@ -84,13 +85,17 @@ public class RecipeActivity extends AppCompatActivity {
     void getRecipe(){
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = Constants.ALL_RECIPE;
-        loadingRecipeData.setVisibility(View.VISIBLE); // Show the Loading Screen
 
+        shimmerCategoryRecipe.startShimmer();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.e("RECIPE HOME", response);
-                loadingRecipeData.setVisibility(View.GONE);
+
+                shimmerCategoryRecipe.stopShimmer();
+                shimmerCategoryRecipe.setVisibility(View.GONE);
+                catNameText.setVisibility(View.VISIBLE);
+                recipeSpecificRecycle.setVisibility(View.VISIBLE);
                 try {
                     JSONObject mainObj = new JSONObject(response);
                     if(mainObj.getString("success").equals("true")){
@@ -156,7 +161,7 @@ public class RecipeActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Error", error.toString());
-                loadingRecipeData.setVisibility(View.VISIBLE); // Show the Loading Screen
+
             }
         });
         queue.add(stringRequest);

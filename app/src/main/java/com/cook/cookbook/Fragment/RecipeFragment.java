@@ -38,7 +38,9 @@ public class RecipeFragment extends Fragment {
     ArrayList<Recipe> recipeList;
     RecipeAdapter adapter;
 
-    LinearLayout breakfast, lunch, dinner, loadingRecipe;
+    LinearLayout breakfast, lunch, dinner;
+
+    ShimmerFrameLayout shimmerLayoutRecipe;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,8 +52,8 @@ public class RecipeFragment extends Fragment {
         breakfast = view.findViewById(R.id.breakfast);
         lunch = view.findViewById(R.id.lunch);
         dinner = view.findViewById(R.id.dinner);
-        loadingRecipe = view.findViewById(R.id.loading_recipe);
 
+        shimmerLayoutRecipe = view.findViewById(R.id.shimmer_Layout_recipe);
 
         initRecipe();
         return view;
@@ -97,14 +99,19 @@ public class RecipeFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getContext());
         String url = Constants.ALL_RECIPE;
 
-        loadingRecipe.setVisibility(View.VISIBLE);
-
+        // Start the Shimmer from the Start
+        shimmerLayoutRecipe.startShimmer();
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.e("RECIPE", response);
-                loadingRecipe.setVisibility(View.GONE);
+
+                shimmerLayoutRecipe.stopShimmer();
+                shimmerLayoutRecipe.setVisibility(View.GONE);
+
+                recipeRecycleView.setVisibility(View.VISIBLE);
+
                 try {
                     JSONObject mainObj = new JSONObject(response);
                     if(mainObj.getString("success").equals("true")){
@@ -152,8 +159,6 @@ public class RecipeFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Error", error.toString());
-                loadingRecipe.setVisibility(View.GONE);
-
             }
         });
         queue.add(stringRequest);

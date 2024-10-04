@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragment.RecipeFragment">
 
     <LinearLayout
@@ -106,29 +107,40 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/loading_recipe"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Loading Recipe data wait..."/>
-
-        </LinearLayout>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recipe_recycle_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_Layout_recipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:animationCache="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <include layout="@layout/shimmer_recipe" />
+
+                <include layout="@layout/shimmer_recipe" />
+
+                <include layout="@layout/shimmer_recipe" />
+
+                <include layout="@layout/shimmer_recipe" />
+
+                <include layout="@layout/shimmer_recipe" />
+
+            </LinearLayout>
+
+
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
 
     </LinearLayout>
 </ScrollView>

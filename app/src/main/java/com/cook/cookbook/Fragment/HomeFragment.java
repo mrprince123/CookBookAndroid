@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.viewmodel.CreationExtras;
@@ -35,6 +36,7 @@ import com.cook.cookbook.Models.Recipe;
 import com.cook.cookbook.R;
 import com.cook.cookbook.Utils.Constants;
 import com.cook.cookbook.databinding.FragmentHomeBinding;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.imaginativeworld.whynotimagecarousel.ImageCarousel;
 import org.imaginativeworld.whynotimagecarousel.model.CarouselItem;
@@ -67,7 +69,11 @@ public class HomeFragment extends Fragment {
     TextView allRecipe;
 
 
-    LinearLayout  loadingCategory, loadingPopularRecipe, loadingAllRecipe;
+    LinearLayout  loadingAllRecipe;
+
+    ShimmerFrameLayout categoryLayoutShimmer, popularRecipeShimmer, allRecipeShimmer, shimmerCarousel;
+
+    CardView carouselCard;
 
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -78,9 +84,11 @@ public class HomeFragment extends Fragment {
         popularRecipeRecyle = view.findViewById(R.id.popular_recipe_recycle_view);
         homeRecipeRecycle = view.findViewById(R.id.all_recipe_recycle_view_home);
         languageChange = view.findViewById(R.id.language_change_logo);
-        loadingCategory = view.findViewById(R.id.loading_categories);
-        loadingPopularRecipe = view.findViewById(R.id.loading_popular_recipe);
-        loadingAllRecipe = view.findViewById(R.id.loading_all_recipe);
+        categoryLayoutShimmer = view.findViewById(R.id.category_layout_shimmer);
+        popularRecipeShimmer =view.findViewById(R.id.popular_recipe_shimmer);
+        allRecipeShimmer = view.findViewById(R.id.all_recipe_shimmer);
+        shimmerCarousel = view.findViewById(R.id.carousel_shimmer);
+        carouselCard = view.findViewById(R.id.carousel_card);
 
         languageChange.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +115,7 @@ public class HomeFragment extends Fragment {
 
         RequestQueue carouselQueue = Volley.newRequestQueue(getContext());
         String url = Constants.ALL_CAROUSEL;
+        shimmerCarousel.startShimmer();
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -114,6 +123,11 @@ public class HomeFragment extends Fragment {
                     try {
                         JSONObject mainObj = new JSONObject(response);
                         Log.e("CAROUSEL", response);
+                        shimmerCarousel.stopShimmer();
+                        shimmerCarousel.setVisibility(View.GONE);
+
+                        carouselCard.setVisibility(View.VISIBLE);
+
                         if(mainObj.getString("success").equals("true")){
                             JSONArray carouselData = mainObj.getJSONArray("data");
 
@@ -155,14 +169,17 @@ public class HomeFragment extends Fragment {
     void getAllCategory() {
         RequestQueue queue = Volley.newRequestQueue(getContext());
         String url = Constants.ALL_CATEGORY;
-        loadingCategory.setVisibility(View.VISIBLE);
+
+        categoryLayoutShimmer.startShimmer();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.e("RESPONSE", response);
-                loadingCategory.setVisibility(View.GONE);
-                try {
 
+                categoryRecycleView.setVisibility(View.VISIBLE);
+                categoryLayoutShimmer.stopShimmer();
+                categoryLayoutShimmer.setVisibility(View.GONE);
+                try {
                     JSONObject mainObj = new JSONObject(response);
                     if(mainObj.getString("success").equals("true")){
                         JSONArray categoryArray = mainObj.getJSONArray("data");
@@ -176,7 +193,6 @@ public class HomeFragment extends Fragment {
                         }
                         adapter.notifyDataSetChanged();
                     }
-
                 } catch (JSONException e){
                     e.printStackTrace();
                 }
@@ -186,8 +202,6 @@ public class HomeFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
                 // Do Nothing
                 Log.e("Error", error.toString());
-                loadingCategory.setVisibility(View.GONE);
-
             }
         });
 
@@ -211,13 +225,16 @@ public class HomeFragment extends Fragment {
 
         RequestQueue queue = Volley.newRequestQueue(getContext());
         String url = Constants.POPULAR_RECIPE;
-        loadingPopularRecipe.setVisibility(View.VISIBLE);
+
+        popularRecipeShimmer.startShimmer();
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.e("RECIPE HOME", response);
-                loadingPopularRecipe.setVisibility(View.GONE);
+                popularRecipeShimmer.stopShimmer();
+                popularRecipeShimmer.setVisibility(View.GONE);
+                popularRecipeRecyle.setVisibility(View.VISIBLE);
                 try {
                     JSONObject mainObj = new JSONObject(response);
                     if(mainObj.getString("success").equals("true")){
@@ -263,8 +280,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Error", error.toString());
-                loadingPopularRecipe.setVisibility(View.GONE);
-
             }
         });
         queue.add(stringRequest);
@@ -287,12 +302,16 @@ public class HomeFragment extends Fragment {
 
         RequestQueue queue = Volley.newRequestQueue(getContext());
         String url = Constants.ALL_RECIPE;
-        loadingAllRecipe.setVisibility(View.VISIBLE);
+
+        allRecipeShimmer.startShimmer();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.e("RECIPE HOME", response);
-                loadingAllRecipe.setVisibility(View.GONE);
+
+                allRecipeShimmer.stopShimmer();
+                allRecipeShimmer.setVisibility(View.GONE);
+                homeRecipeRecycle.setVisibility(View.VISIBLE);
                 try {
                     JSONObject mainObj = new JSONObject(response);
                     if(mainObj.getString("success").equals("true")){
