@@ -40,12 +40,11 @@
             <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
                 android:id="@+id/full_recipe_videoPlay"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-                app:autoPlay="false" />
+                android:layout_height="280dp"
+                app:color="@color/orange_700"
+                app:enableAutomaticInitialization="false"/>
 
         </androidx.cardview.widget.CardView>
-
-
 
         <TextView
             android:layout_width="match_parent"

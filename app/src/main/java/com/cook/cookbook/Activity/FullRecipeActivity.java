@@ -15,8 +15,11 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.cook.cookbook.R;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.customui.DefaultPlayerUiController;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.util.ArrayList;
@@ -28,6 +31,9 @@ public class FullRecipeActivity extends AppCompatActivity {
     ImageView recipeImage;
     LinearLayout ingredientsContainer;
     YouTubePlayerView youtubePlayerView;
+
+
+    boolean isFullScreen = false; // Track fullscreen state
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,19 +76,27 @@ public class FullRecipeActivity extends AppCompatActivity {
                 .load(intent.getStringExtra("image"))
                 .into(recipeImage);
 
-
         // Populate ingredients
         ArrayList<HashMap<String, String>> ingredientsList = (ArrayList<HashMap<String, String>>) intent.getSerializableExtra("ingredients");
         populateIngredients(ingredientsList);
 
-        youtubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+        YouTubePlayerListener listener = new AbstractYouTubePlayerListener() {
             @Override
-            public void onReady(@NonNull YouTubePlayer youTubePlayer){
+            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                // Use DefaultPlayerUiController for a custom UI
+                DefaultPlayerUiController defaultPlayerUiController = new DefaultPlayerUiController(youtubePlayerView, youTubePlayer);
+                youtubePlayerView.setCustomPlayerUi(defaultPlayerUiController.getRootView());
+
                 String videoId = extractVideoId(intent.getStringExtra("videoUrl"));
                 youTubePlayer.loadVideo(videoId, 0);
             }
-        });
+        };
+
+        // Add options to disable the default iframe controls
+        IFramePlayerOptions options = new IFramePlayerOptions.Builder().controls(0).build();
+        youtubePlayerView.initialize(listener, options);
     }
+
 
     // Extract the video ID from a YouTube URL
     private String extractVideoId(String videoUrl) {
@@ -110,7 +124,7 @@ public class FullRecipeActivity extends AppCompatActivity {
             ingredientNameView.setLayoutParams(new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT));
-            ingredientNameView.setText(ingredient.get("name") + " : " +  ingredient.get("quantity"));
+            ingredientNameView.setText(ingredient.get("name") + " : " + ingredient.get("quantity"));
 
             // Add the ingredient views to the container
             ingredientsContainer.addView(ingredientNameView);
