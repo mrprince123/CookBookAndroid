@@ -10,7 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -38,9 +40,13 @@ public class RecipeFragment extends Fragment {
     ArrayList<Recipe> recipeList;
     RecipeAdapter adapter;
 
+    ArrayList<Recipe> filterList;
+
     LinearLayout breakfast, lunch, dinner;
 
     ShimmerFrameLayout shimmerLayoutRecipe;
+
+    EditText searchRecipeInput;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,13 +60,27 @@ public class RecipeFragment extends Fragment {
         dinner = view.findViewById(R.id.dinner);
 
         shimmerLayoutRecipe = view.findViewById(R.id.shimmer_Layout_recipe);
+        shimmerLayoutRecipe.startShimmer();
+
+        searchRecipeInput = view.findViewById(R.id.search_recipe_input);
+
+
+        searchRecipeInput.setOnClickListener(view1 -> {
+            String searchValue = searchRecipeInput.getText().toString();
+            Toast.makeText(getContext(), searchValue, Toast.LENGTH_SHORT).show();
+            filterSearch(searchValue);
+
+        });
 
         initRecipe();
         return view;
     }
 
+
+
     void initRecipe(){
         recipeList = new ArrayList<>();
+        filterList = new ArrayList<>(); // Initialize the filtered list
         adapter = new RecipeAdapter(getContext(), recipeList);
         setupCategoryClickListeners();
         getRecipe(null);  // Load all recipes initially
@@ -69,6 +89,17 @@ public class RecipeFragment extends Fragment {
         recipeRecycleView.setAdapter(adapter);
     }
 
+    void filterSearch(String searchValue){
+        filterList.clear();
+        for(Recipe recipe : recipeList){
+            if(recipe.getName().toLowerCase().contains(searchValue)){
+                filterList.add(recipe);
+            } else {
+                Toast.makeText(getContext(), "No Recipe Found with Provided Name", Toast.LENGTH_LONG).show();
+            }
+        }
+        adapter.updateRecipeList(filterList);
+    }
 
     // Setting up click listeners for each category
     void setupCategoryClickListeners() {
@@ -98,9 +129,6 @@ public class RecipeFragment extends Fragment {
         recipeList.clear(); // Clear the list before adding the new itsms
         RequestQueue queue = Volley.newRequestQueue(getContext());
         String url = Constants.ALL_RECIPE;
-
-        // Start the Shimmer from the Start
-        shimmerLayoutRecipe.startShimmer();
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

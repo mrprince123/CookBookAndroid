@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +45,10 @@ public class RecipeActivity extends AppCompatActivity {
     RecyclerView recipeSpecificRecycle;
     TextView catNameText, noRecipeText;
 
+    EditText searchRecipeInputCategory;
+
+    ArrayList<Recipe> filterList;
+
     ShimmerFrameLayout shimmerCategoryRecipe;
 
     @Override
@@ -68,12 +74,20 @@ public class RecipeActivity extends AppCompatActivity {
         noRecipeText.setVisibility(View.GONE);
         shimmerCategoryRecipe = findViewById(R.id.shimmer_category_recipe);
 
+        searchRecipeInputCategory = findViewById(R.id.search_recipe_input_category);
+
+        searchRecipeInputCategory.setOnClickListener(view -> {
+            String SearchRecipeValue = searchRecipeInputCategory.getText().toString();
+            filterRecipe(SearchRecipeValue);
+        });
+
         initRecipe();
     }
 
     void initRecipe(){
         recipes = new ArrayList<>();
         recipeSpecificAdapter = new RecipeSpecificAdapter(this, recipes);
+        filterList = new ArrayList<>();
 
         getRecipe();
 
@@ -165,6 +179,18 @@ public class RecipeActivity extends AppCompatActivity {
             }
         });
         queue.add(stringRequest);
+    }
+
+    void filterRecipe(String reciepValue){
+        filterList.clear();
+        for(Recipe recipe : recipes){
+            if(recipe.getName().toLowerCase().contains(reciepValue)){
+                filterList.add(recipe);
+            } else {
+                Toast.makeText(this, "No Recipe Found with Provided Name", Toast.LENGTH_LONG).show();
+            }
+        }
+        recipeSpecificAdapter.updateRecipe(filterList);
     }
 
 }

@@ -23,7 +23,7 @@ import java.util.HashMap;
 public class RecipeSpecificAdapter extends RecyclerView.Adapter<RecipeSpecificAdapter.RecipeViewHolder> {
 
     private final Context context;
-    private final ArrayList<Recipe> recipes;
+    private ArrayList<Recipe> recipes;
 
     public RecipeSpecificAdapter(Context context, ArrayList<Recipe> recipes) {
         this.context = context;
@@ -93,5 +93,10 @@ public class RecipeSpecificAdapter extends RecyclerView.Adapter<RecipeSpecificAd
             recipeImage = itemView.findViewById(R.id.recipe_image);
             recipeTime = itemView.findViewById(R.id.recipe_description);
         }
+    }
+
+    public void updateRecipe(ArrayList<Recipe> filterList){
+        this.recipes = filterList;
+        notifyDataSetChanged();
     }
 }

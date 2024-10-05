@@ -14,7 +14,7 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/search_recipe_input"
+            android:id="@+id/search_recipe_input_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Search for a recipe..."

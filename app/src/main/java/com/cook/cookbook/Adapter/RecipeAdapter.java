@@ -24,7 +24,7 @@ import java.util.HashMap;
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
     private final Context context;
-    private final ArrayList<Recipe> recipes;
+    private ArrayList<Recipe> recipes;
 
     public RecipeAdapter(Context context, ArrayList<Recipe> recipes) {
         this.context = context;
@@ -92,5 +92,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             recipeImage = itemView.findViewById(R.id.recipe_image);
             recipeTime = itemView.findViewById(R.id.recipe_description);
         }
+    }
+
+    public void updateRecipeList(ArrayList<Recipe> filterList){
+        this.recipes = filterList;
+        notifyDataSetChanged();
     }
 }

@@ -10,7 +10,7 @@
         android:id="@id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        android:layout_margin="10dp"
         android:orientation="vertical">
 
         <TextView
@@ -40,9 +40,9 @@
             <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
                 android:id="@+id/full_recipe_videoPlay"
                 android:layout_width="match_parent"
-                android:layout_height="280dp"
+                android:layout_height="wrap_content"
                 app:color="@color/orange_700"
-                app:enableAutomaticInitialization="false"/>
+                app:enableAutomaticInitialization="false" />
 
         </androidx.cardview.widget.CardView>
 
@@ -114,8 +114,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/favourite_24"
-                    android:tint="@color/black"/>
+                    android:src="@drawable/favourite_24" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -139,8 +138,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/share_24"
-                    android:tint="@color/black"/>
+                    android:src="@drawable/share_24" />
 
                 <TextView
                     android:layout_width="wrap_content"

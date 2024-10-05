@@ -1,26 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:foregroundTint="#FF5722">
 
-    <ImageButton
-        android:id="@+id/play_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:background="@drawable/play_24" />
+    <View
+        android:id="@+id/video_panel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/orange_200"
+        android:clickable="true"
+        android:focusable="true" />
 
-    <SeekBar
-        android:id="@+id/seek_bar"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom" />
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-    <ImageButton
-        android:id="@+id/fullscreen_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|top"
-        android:background="@drawable/fullscreen_24" />
+        <ImageButton
+            android:id="@+id/play_button"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/pause_24" />
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/current_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="00:00"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="14dp" />
+
+        <SeekBar
+            android:id="@+id/seek_bar"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:indeterminate="false"
+            android:progressBackgroundTint="#FFFFFF"
+            android:progressTint="#FF5722"
+            android:thumbTint="@color/white" />
+
+        <TextView
+            android:id="@+id/total_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="02:44"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="14dp" />
+
+        <ImageButton
+            android:id="@+id/fullscreen_button"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:hapticFeedbackEnabled="true"
+            android:background="@drawable/fullscreen_24"
+            android:contentDescription="Fullscreen button" />
+
+    </LinearLayout>
+</RelativeLayout>
