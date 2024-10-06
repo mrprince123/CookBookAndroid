@@ -13,11 +13,14 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.cook.cookbook.R;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 
 public class WishListFragment extends Fragment {
 
     private WebView webView;
+
+    ShimmerFrameLayout blogShimmer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -27,6 +30,8 @@ public class WishListFragment extends Fragment {
 
         webView = view.findViewById(R.id.blog_webview);
 
+        blogShimmer = view.findViewById(R.id.blog_shimmer);
+        blogShimmer.startShimmer();
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
@@ -42,6 +47,9 @@ public class WishListFragment extends Fragment {
                                 "   document.querySelector('#right-sidebar').style.display='none'; " + // Hide sidebar (if exists)
                                 "   document.querySelector('.site-footer').style.display='none'; " + // Hide any ad sections
                                 "})()", null);
+
+                blogShimmer.stopShimmer();
+                blogShimmer.setVisibility(View.GONE);
             }
 
             @Override
@@ -52,7 +60,6 @@ public class WishListFragment extends Fragment {
         });
 
         webView.loadUrl("https://blog.princesahni.com/category/food/");
-
 
         webView.setOnKeyListener(new View.OnKeyListener() {
             @Override
