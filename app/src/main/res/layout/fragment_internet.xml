@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="15dp"
+    android:background="@color/white"
+    tools:context=".Fragment.InternetFragment">
+
+    <ImageView
+        android:id="@+id/internet_image"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:layout_centerInParent="true"
+        android:src="@drawable/no_internet"/>
+
+    <TextView
+        android:layout_below="@id/internet_image"
+        android:id="@+id/internet_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:text="You're Offline Right now!!"/>
+
+    <TextView
+        android:layout_below="@id/internet_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textColor="@color/grayText"
+        android:text="Please connect to the internet and restart the app to access all the recipe"/>
+
+
+</RelativeLayout>

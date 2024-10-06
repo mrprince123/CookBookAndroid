@@ -1,7 +1,9 @@
 package com.cook.cookbook;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import com.cook.cookbook.Utils.NetworkUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +37,15 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        // Check for internet connection
+        if (!NetworkUtil.isConnectedToInternet(this)) {
+            // Navigate to InternetFragment if no internet connection is found
+            navController.navigate(R.id.navigation_internet);
+        }
     }
+
+
+
 
 }

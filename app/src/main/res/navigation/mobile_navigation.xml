@@ -23,4 +23,11 @@
         android:label="@string/title_wishlist"
         tools:layout="@layout/fragment_wish_list" />
 
+    <fragment
+        android:id="@+id/navigation_internet"
+        android:name="com.cook.cookbook.Fragment.InternetFragment"
+        android:label="No Internet"
+        tools:layout="@layout/fragment_internet" />
+
+
 </navigation>

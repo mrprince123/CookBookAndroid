@@ -3,17 +3,21 @@ package com.cook.cookbook.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.cook.cookbook.MainActivity;
 import com.cook.cookbook.R;
 
 public class SplashScreenActivity extends AppCompatActivity {
+
+    ImageView splashLogo;
+    TextView splashText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +27,11 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
+        splashLogo = findViewById(R.id.splash_logo);
+        splashText = findViewById(R.id.splash_text);
+
+        splashAnimation();
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -31,7 +40,14 @@ public class SplashScreenActivity extends AppCompatActivity {
                 finish();
             }
         }, 3000);
+    }
 
+    void splashAnimation(){
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.side_slide);
+        splashLogo.startAnimation(animation);
+
+        Animation animationText = AnimationUtils.loadAnimation(this, R.anim.up_slide);
+        splashText.setAnimation(animationText);
     }
 }
 

@@ -94,7 +94,7 @@ public class HomeFragment extends Fragment {
         languageChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "Language Change Development is going on", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Welcome to Cook Help : Your Recipe Master", Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -189,6 +189,5 @@
                 android:src="@drawable/gulab_jamun" />
 
         </androidx.cardview.widget.CardView>
-
     </LinearLayout>
 </ScrollView>
