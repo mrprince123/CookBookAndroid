@@ -48,7 +48,6 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.volley)
     implementation(libs.glide)
-//    implementation(libs.youtubePlayer)
     implementation(libs.whynotImage)
     implementation(libs.shimmer)
     implementation(libs.youtubePlayerCore)

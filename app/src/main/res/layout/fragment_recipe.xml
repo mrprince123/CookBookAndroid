@@ -19,18 +19,22 @@
             android:hint="Search for a recipe..."
             android:padding="10dp"
             android:textColor="@color/black"
-            android:backgroundTint="@color/gray"
+            android:backgroundTint="@color/foregroundColor"
             android:background="@drawable/rounded_edittext"
             android:inputType="text"
             android:drawableStart="@drawable/search_24"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:drawablePadding="8dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -39,6 +43,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_favourite"
+                android:backgroundTint="@color/foregroundColor"
                 android:padding="5dp"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -52,6 +57,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/grayText"
                     android:text="Breakfast"/>
 
             </LinearLayout>
@@ -63,6 +69,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_favourite"
                 android:padding="5dp"
+                android:backgroundTint="@color/foregroundColor"
                 android:gravity="center"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
@@ -77,6 +84,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/grayText"
                     android:text="Lunch"/>
 
             </LinearLayout>
@@ -88,6 +96,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_favourite"
                 android:padding="5dp"
+                android:backgroundTint="@color/foregroundColor"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -101,6 +110,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/grayText"
                     android:text="Dinner"/>
 
             </LinearLayout>

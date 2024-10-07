@@ -8,9 +8,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/cook_help_two"
+        android:icon="@drawable/cook_help_two_round"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/cook_help_two"
+        android:roundIcon="@drawable/cook_help_two_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CookBook"
         tools:targetApi="31">

@@ -8,13 +8,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+
     <color name="gray">#e9ecef</color>
-    <color name="grayText">#6c757d</color>
+    <color name="grayText">#adb5bd</color>
 
-    <color name="backgroundColor">#f5f3f4</color>
-    <color name="textColor">#000000</color>
-    <color name="foregroundColor">#FFFFFF</color>
-    
-    <color name="BottomBar">#e9ecef</color>
 
+    <color name="backgroundColor">#191A25</color>
+    <color name="textColor">#FFFFFF</color>
+    <color name="foregroundColor">#292A36</color>
+
+    <color name="BottomBar">#292A36</color>
 </resources>

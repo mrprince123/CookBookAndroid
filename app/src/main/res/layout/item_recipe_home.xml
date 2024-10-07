@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
+        android:background="@color/foregroundColor"
         android:orientation="horizontal">
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -39,7 +40,7 @@
             android:text="Aloo Paratha"
             android:textStyle="bold"
             android:textAlignment="textStart"
-            android:textColor="@android:color/black"
+            android:textColor="@color/textColor"
             android:textSize="16sp" />
 
         <TextView

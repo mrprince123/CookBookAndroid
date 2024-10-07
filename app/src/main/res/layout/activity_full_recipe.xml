@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Gulab Jamun"
-            android:textColor="@color/black"
+            android:textColor="@color/textColor"
             android:textSize="25sp"
             android:textStyle="bold" />
 
@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Chef: Randy Savage"
-            android:textColor="@color/black"
+            android:textColor="@color/grayText"
             android:textSize="16sp" />
 
         <androidx.cardview.widget.CardView
@@ -50,8 +50,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Cooking Details"
-            android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textColor="@color/textColor"
+            android:textSize="20sp"
             android:layout_marginTop="20dp"
             android:textStyle="bold" />
 
@@ -60,6 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/grayText"
             android:text="Cooking Time : 30 minutes" />
 
         <TextView
@@ -67,6 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/grayText"
             android:text="Category : Indian" />
 
         <TextView
@@ -74,14 +76,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/grayText"
             android:text="Food Type : 30 minutes" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Ingredients"
-            android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textColor="@color/textColor"
+            android:textSize="20sp"
             android:layout_marginTop="20dp"
             android:textStyle="bold" />
 
@@ -120,7 +123,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Favourite"
-                    android:textColor="@color/black"
+                    android:textColor="@color/textColor"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"/>
             </LinearLayout>
@@ -144,13 +147,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Share"
-                    android:textColor="@color/black"
+                    android:textColor="@color/textColor"
                     android:layout_gravity="center"
                     android:gravity="center_vertical"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"/>
             </LinearLayout>
-
 
         </LinearLayout>
 
@@ -159,8 +161,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Description"
-            android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textColor="@color/textColor"
+            android:textSize="20sp"
             android:layout_marginTop="20dp"
             android:textStyle="bold" />
 
