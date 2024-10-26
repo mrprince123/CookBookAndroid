@@ -50,9 +50,3 @@ public class SplashScreenActivity extends AppCompatActivity {
         splashText.setAnimation(animationText);
     }
 }
-
-
-//These are the steps
-//1. show the activty for the 3 seconds
-//2. then navigate to the home page
-//3. close the activity and never come back

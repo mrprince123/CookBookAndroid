@@ -1,16 +1,23 @@
 package com.cook.cookbook.Fragment;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -33,6 +40,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class RecipeFragment extends Fragment {
 
@@ -47,6 +55,10 @@ public class RecipeFragment extends Fragment {
     ShimmerFrameLayout shimmerLayoutRecipe;
 
     EditText searchRecipeInput;
+
+    ImageView voiceSearch;
+    private static final int REQUEST_CODE_SPEECH_INPUT = 1;
+    String voiceSearchValue = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,17 +75,55 @@ public class RecipeFragment extends Fragment {
         shimmerLayoutRecipe.startShimmer();
 
         searchRecipeInput = view.findViewById(R.id.search_recipe_input);
+        voiceSearch = view.findViewById(R.id.voice_search_fragment);
+        voiceSearch.setOnClickListener(view1 -> {
+            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to Search Recipe");
 
+            try {
+                startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
+            } catch (Exception e){
+                Toast
+                        .makeText(getContext(), " " + e.getMessage(),
+                                Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
 
         searchRecipeInput.setOnClickListener(view1 -> {
             String searchValue = searchRecipeInput.getText().toString();
-            Toast.makeText(getContext(), searchValue, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), searchValue, Toast.LENGTH_SHORT).show();
             filterSearch(searchValue);
 
         });
 
         initRecipe();
         return view;
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_CODE_SPEECH_INPUT){
+            if(resultCode == RESULT_OK && data != null){
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                if(result != null && result.size() > 0){
+                    voiceSearchValue = result.get(0);
+
+                    searchRecipeInput.setText(voiceSearchValue);
+
+                    // Optionally, show a message with the recognized text
+//                    Toast.makeText(getContext(), "Showing Result : " + voiceSearchValue, Toast.LENGTH_SHORT).show();
+
+                    // Trigger the Search with the recognized voice input
+                    filterSearch(voiceSearchValue);
+                }
+            }
+        }
     }
 
 
@@ -94,9 +144,11 @@ public class RecipeFragment extends Fragment {
         for(Recipe recipe : recipeList){
             if(recipe.getName().toLowerCase().contains(searchValue)){
                 filterList.add(recipe);
-            } else {
-                Toast.makeText(getContext(), "No Recipe Found with Provided Name", Toast.LENGTH_LONG).show();
             }
+        }
+
+        if(filterList.isEmpty()){
+            Toast.makeText(getContext(), "No Recipe Found with Provided Name", Toast.LENGTH_LONG).show();
         }
         adapter.updateRecipeList(filterList);
     }

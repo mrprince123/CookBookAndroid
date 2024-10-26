@@ -76,7 +76,6 @@ public class WishListFragment extends Fragment {
                             break;
                     }
                 }
-
                 return false;
             }
         });

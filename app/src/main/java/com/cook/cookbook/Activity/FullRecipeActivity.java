@@ -1,19 +1,14 @@
 package com.cook.cookbook.Activity;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.cook.cookbook.R;
@@ -37,17 +32,9 @@ public class FullRecipeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_full_recipe);
 
         getSupportActionBar().hide();
-
-        // Ensure that your layout is not cut off by the status bar
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
         // Initialize views
         recipeName = findViewById(R.id.full_recipe_name);
@@ -91,34 +78,10 @@ public class FullRecipeActivity extends AppCompatActivity {
             }
         };
 
-//        YouTubePlayerListener listener = new AbstractYouTubePlayerListener() {
-//            @Override
-//            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-//                // Use DefaultPlayerUiController for a custom UI
-//                DefaultPlayerUiController defaultPlayerUiController = new DefaultPlayerUiController(youtubePlayerView, youTubePlayer);
-//                youtubePlayerView.setCustomPlayerUi(defaultPlayerUiController.getRootView());
-//
-//                String videoId = extractVideoId(intent.getStringExtra("videoUrl"));
-//                youTubePlayer.loadVideo(videoId, 0);
-//            }
-//        };
-
         // Add options to disable the default iframe controls
         IFramePlayerOptions options = new IFramePlayerOptions.Builder().controls(0).build();
         youtubePlayerView.initialize(listener, options);
     }
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
-          youtubePlayerView.matchParent();
-        } else if(newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-            youtubePlayerView.wrapContent();
-        }
-    }
-
 
     // Extract the video ID from a YouTube URL
     private String extractVideoId(String videoUrl) {

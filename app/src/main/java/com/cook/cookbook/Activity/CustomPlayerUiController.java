@@ -5,7 +5,10 @@ import static com.pierfrancescosoffritti.androidyoutubeplayer.core.customui.util
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.hardware.display.DisplayManager;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -69,19 +72,41 @@ public class CustomPlayerUiController extends AbstractYouTubePlayerListener {
         });
 
         fullScreenButton.setOnClickListener((view) -> {
-            if(fullscreen){
-                youTubePlayerView.wrapContent();
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+            ViewGroup.LayoutParams params = youTubePlayerView.getLayoutParams();
+
+            if (fullscreen) {
+                // Exit Full Screen
+                if (params != null) {
+                    params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT; // Use wrap_content when exiting fullscreen
+                    youTubePlayerView.setLayoutParams(params);
+                }
                 fullScreenButton.setBackgroundResource(R.drawable.fullscreen_24);
                 ((Activity) context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-            }
-            else{
-                youTubePlayerView.matchParent();
+                // Restore system UI
+                ((Activity) context).getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+            } else {
+                // Enter Full Screen
+                if (params != null) {
+                    params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    params.height = displayMetrics.widthPixels; // Set height to the device height
+                    youTubePlayerView.setLayoutParams(params);
+                }
                 fullScreenButton.setBackgroundResource(R.drawable.fullscreen_exit_24);
                 ((Activity) context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                // Hide system UI for fullscreen
+                ((Activity) context).getWindow().getDecorView().setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                );
             }
-
             fullscreen = !fullscreen;
         });
+
 
         progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override

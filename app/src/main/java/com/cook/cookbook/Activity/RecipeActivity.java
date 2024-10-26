@@ -2,14 +2,16 @@ package com.cook.cookbook.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -36,6 +38,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class RecipeActivity extends AppCompatActivity {
 
@@ -50,6 +53,10 @@ public class RecipeActivity extends AppCompatActivity {
     ArrayList<Recipe> filterList;
 
     ShimmerFrameLayout shimmerCategoryRecipe;
+
+    ImageView voiceSearch;
+    private static final int REQUEST_CODE_SPEECH_INPUT = 1;
+    String voiceSearchValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +88,43 @@ public class RecipeActivity extends AppCompatActivity {
             filterRecipe(SearchRecipeValue);
         });
 
+        voiceSearch = findViewById(R.id.voice_search);
+        voiceSearch.setOnClickListener(view -> {
+            Intent intent2 = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent2.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent2.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+            intent2.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to Search Recipe");
+
+            try {
+                startActivityForResult(intent2, REQUEST_CODE_SPEECH_INPUT);
+            } catch (Exception e){
+                Toast
+                        .makeText(this, " " + e.getMessage(),
+                                Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
+
         initRecipe();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_CODE_SPEECH_INPUT){
+            if(resultCode == RESULT_OK && data != null){
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                if(result != null && result.size() > 0){
+                    voiceSearchValue = result.get(0);
+
+                    searchRecipeInputCategory.setText(voiceSearchValue);
+
+                    // Trigger the Search with the recognized voice input
+                    filterRecipe(voiceSearchValue);
+                }
+            }
+        }
     }
 
     void initRecipe(){
@@ -186,10 +229,13 @@ public class RecipeActivity extends AppCompatActivity {
         for(Recipe recipe : recipes){
             if(recipe.getName().toLowerCase().contains(reciepValue)){
                 filterList.add(recipe);
-            } else {
-                Toast.makeText(this, "No Recipe Found with Provided Name", Toast.LENGTH_LONG).show();
             }
         }
+
+        if(filterList.isEmpty()){
+            Toast.makeText(this, "No Recipe Found with Provided Name", Toast.LENGTH_LONG).show();
+        }
+
         recipeSpecificAdapter.updateRecipe(filterList);
     }
 
