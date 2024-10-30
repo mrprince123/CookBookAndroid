@@ -84,7 +84,7 @@ public class RecipeActivity extends AppCompatActivity {
         searchRecipeInputCategory = findViewById(R.id.search_recipe_input_category);
 
         searchRecipeInputCategory.setOnClickListener(view -> {
-            String SearchRecipeValue = searchRecipeInputCategory.getText().toString();
+            String SearchRecipeValue = searchRecipeInputCategory.getText().toString().toLowerCase().trim();
             filterRecipe(SearchRecipeValue);
         });
 

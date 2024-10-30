@@ -93,10 +93,8 @@ public class RecipeFragment extends Fragment {
         });
 
         searchRecipeInput.setOnClickListener(view1 -> {
-            String searchValue = searchRecipeInput.getText().toString();
-//            Toast.makeText(getContext(), searchValue, Toast.LENGTH_SHORT).show();
+            String searchValue = searchRecipeInput.getText().toString().toLowerCase().trim();
             filterSearch(searchValue);
-
         });
 
         initRecipe();
@@ -125,8 +123,6 @@ public class RecipeFragment extends Fragment {
             }
         }
     }
-
-
 
     void initRecipe(){
         recipeList = new ArrayList<>();
