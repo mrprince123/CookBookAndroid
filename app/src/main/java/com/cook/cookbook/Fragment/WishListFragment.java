@@ -59,7 +59,7 @@ public class WishListFragment extends Fragment {
             }
         });
 
-        webView.loadUrl("https://blog.princesahni.com/category/food/");
+        webView.loadUrl("https://princesahniblog.site/category/food/");
 
         webView.setOnKeyListener(new View.OnKeyListener() {
             @Override

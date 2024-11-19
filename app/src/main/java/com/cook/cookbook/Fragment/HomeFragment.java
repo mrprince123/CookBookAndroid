@@ -1,6 +1,5 @@
 package com.cook.cookbook.Fragment;
 
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -61,8 +60,7 @@ public class HomeFragment extends Fragment {
     ArrayList<Recipe> recipeList;
     RecipeAdapterHome recipeAdapterHome;
 
-    TextView allRecipe;
-
+//    TextView allRecipe;
 
     LinearLayout  loadingAllRecipe;
 
@@ -92,7 +90,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        allRecipe = view.findViewById(R.id.view_all_recipe);
+//        allRecipe = view.findViewById(R.id.view_all_recipe);
 
         setCarouselImage();
         initCategory();
@@ -199,7 +197,6 @@ public class HomeFragment extends Fragment {
                 Log.e("Error", error.toString());
             }
         });
-
         queue.add(stringRequest);
     }
 
@@ -352,7 +349,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Error", error.toString());
-
             }
         });
         queue.add(stringRequest);
